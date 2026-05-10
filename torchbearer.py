@@ -32,9 +32,11 @@ def explain_problem():
         Your Part 1 README answers, written as a string.
         Must match what you wrote in README Part 1.
 
-    TODO
     """
-    return "TODO"
+    Q1 = "Dijkstra from S can give us the cheapest cost to get to every node from S, but it cant decide whic relic to visit first. Once you pick the first relic, every cost after that starts from the relic, not S, so a single run from S will miss every cost past the first hop."
+    Q2 = " The decision that remains is the order to visit the certain relics in. The cost table is just for lookup at this point, so the actual optimization is picking the permutation of relics between S and T so we minimize the sum of the looksups."
+    Q3 = " Different visit orders give different totals and the costs alone can't tell us which permutation wins, so will have to serach over relic orderings instead of computer answer directly."
+    return Q1 + Q2 + Q3
 
 
 # =============================================================================
@@ -281,3 +283,4 @@ def _run_tests():
 
 if __name__ == "__main__":
     _run_tests()
+    
