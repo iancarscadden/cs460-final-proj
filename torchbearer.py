@@ -2,8 +2,8 @@
 CS 460 – Algorithms: Final Programming Assignment
 The Torchbearer
 
-Student Name: ___________________________
-Student ID:   ___________________________
+Student Name: Ian Carscadden
+Student ID:   827329757
 
 INSTRUCTIONS
 ------------
