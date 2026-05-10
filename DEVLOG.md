@@ -10,12 +10,16 @@
 
 ---
 
-## Entry 1 – [Date]: Initial Plan
+## Entry 1 – [5/10/26]: Initial Plan
 
 > Required. Write this before writing any code. Describe your plan: what you will
 > implement first, what parts you expect to be difficult, and how you plan to test.
 
-_Your entry here._
+This seems like a TSP variant where we have a directed graph and we need to hit every relic in a order between S and T.
+My plan is to precompute shortest paths with dijkstra from S and each relic, then perform a recursive serach over relic orderings.
+I think the lower bound for pruning is going to be the hardest part for me bc it cant overshoot the real remaining cost but still
+cut branches. For testing i plan to start by using the cases provided and possibly build a graph where nearest neghibor gives a wrong
+answer to ensure the search is not greedy.
 
 ---
 
@@ -47,14 +51,14 @@ _Your entry here._
 
 > Required. Estimate minutes spent per part. Honesty is expected; accuracy is not graded.
 
-| Part | Estimated Hours |
-|---|---|
-| Part 1: Problem Analysis | |
-| Part 2: Precomputation Design | |
-| Part 3: Algorithm Correctness | |
-| Part 4: Search Design | |
-| Part 5: State and Search Space | |
-| Part 6: Pruning | |
-| Part 7: Implementation | |
-| README and DEVLOG writing | |
-| **Total** | |
+| Part                           | Estimated Hours |
+| ------------------------------ | --------------- |
+| Part 1: Problem Analysis       |                 |
+| Part 2: Precomputation Design  |                 |
+| Part 3: Algorithm Correctness  |                 |
+| Part 4: Search Design          |                 |
+| Part 5: State and Search Space |                 |
+| Part 6: Pruning                |                 |
+| Part 7: Implementation         |                 |
+| README and DEVLOG writing      |                 |
+| **Total**                      |                 |

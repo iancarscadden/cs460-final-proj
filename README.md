@@ -17,13 +17,17 @@
 > per question. Each bullet should be 1-2 sentences max.
 
 - **Why a single shortest-path run from S is not enough:**
-  _Your answer here._
+  Dijkstra from S can give us the cheapest cost to get to every node from S, but it cant decide whic relic to visit first.
+  Once you pick the first relic, every cost after that starts from the relic, not S, so a single run from S will miss every cost
+  past the first hop.
 
 - **What decision remains after all inter-location costs are known:**
-  _Your answer here._
+  The decision that remains is the order to visit the certain relics in. The cost table is just for lookup at this point, so the
+  actual optimization is picking the permutation of relics between S and T so we minimize the sum of the looksups.
 
 - **Why this requires a search over orders (one sentence):**
-  _Your answer here._
+  Different visit orders give different totals and the costs alone can't tell us which permutation wins, so will have to serach
+  over relic orderings instead of computer answer directly.
 
 ---
 
