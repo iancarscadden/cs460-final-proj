@@ -37,31 +37,31 @@
 
 > List the source node types as a bullet list. For each, one-line reason.
 
-| Source Node Type | Why it is a source |
-| ---------------- | ------------------ |
-| _node type_      | _one-line reason_  |
-| _node type_      | _one-line reason_  |
+| Source Node Type | Why it is a source                                                                                                                            |
+| ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| S                | We start the route here, so we want the cheapest cost from S to every relic to decide which one to go at first.                               |
+| Each relic       | After we visit a relic we want the cheapest cost from it to the remaining relics or the xit so every relic also have ot be a dijkstra source. |
 
 ### Part 2b: Distance Storage
 
 > Fill in the table. No prose required.
 
-| Property                    | Your answer |
-| --------------------------- | ----------- |
-| Data structure name         |             |
-| What the keys represent     |             |
-| What the values represent   |             |
-| Lookup time complexity      |             |
-| Why O(1) lookup is possible |             |
+| Property                    | Your answer                                                                                    |
+| --------------------------- | ---------------------------------------------------------------------------------------------- |
+| Data structure name         | nested dictionary                                                                              |
+| What the keys represent     | outer key is source, inner is destination                                                      |
+| What the values represent   | the cheapest fuel cost from source to destination                                              |
+| Lookup time complexity      | O(1)                                                                                           |
+| Why O(1) lookup is possible | python dicts are hash tables, so dist_table[u][v] is two hash lookups and each is O(1) average |
 
 ### Part 2c: Precomputation Complexity
 
 > State the total complexity and show the arithmetic. Two to three lines max.
 
-- **Number of Dijkstra runs:** _your answer_
-- **Cost per run:** _your answer_
-- **Total complexity:** _your answer_
-- **Justification (one line):** _your answer_
+- **Number of Dijkstra runs:** `k + 1`, one from the spawn and one from each of the k relics
+- **Cost per run:** O(m log n) using binary heap
+- **Total complexity:** `O((k + 1) * m log n)` simplified -> `O(k * m log n)`
+- **Justification (one line):** we run dikstra once per source and there are `k + 1` sources so the total cost is the `per run cost * num of source`
 
 ---
 
@@ -76,29 +76,31 @@
 > Do not copy the invariant text from the spec.
 
 - **For nodes already finalized (in S):**
-  _Your answer here._
+  - dist[v] is the actual shortest path cost from x to v and it wont change.
+  - The algorithm has confirmed there is no cheaper way to get there
 
 - **For nodes not yet finalized (not in S):**
-  _Your answer here._
+  - dist[u] is the cheapest path to u we have found so far but only using finalized nodes as the steps in between.
+  - It can still get smaller once more nodes get added to S.
 
 ### Part 3b: Why Each Phase Holds
 
 > One to two bullets per phase. Maintenance must mention nonnegative edge weights.
 
 - **Initialization : why the invariant holds before iteration 1:**
-  _Your answer here._
+  - Before the first interation S will be empty so the "for every v in S" part is true. dist[x] is 0 since the empty path from x to iteslf has cost 0, and every other dist is infinity which matches "no path exists using only S-internal vertices" since there are no internal vertices to use yet.
 
 - **Maintenance : why finalizing the min-dist node is always correct:**
-  _Your answer here._
+  - When we pop the min-dist node u from outside S, dist[u] really is its shortest path. Any shorter path would have to leave S at some node w with dist[w] less than or equal to dist[u], but since edge weights are nonnegative the rest of the path from w to u cant make the total smaller, so no shorter path can exist.
 
 - **Termination : what the invariant guarantees when the algorithm ends:**
-  _Your answer here._
+  - Once the heap is empty every reachable node has been finalized, so the dist values are the shortest path costs from x. anything unreachable stays at infinity.
 
 ### Part 3c: Why This Matters for the Route Planner
 
 > One sentence connecting correct distances to correct routing decisions.
 
-_Your answer here._
+- If the distance table has wrong values then the route planner is optimizing over fake costs, so the order it picks might be more expensive than another order in the real graph.
 
 ---
 

@@ -58,7 +58,13 @@ def select_sources(spawn, relics, exit_node):
 
     TODO
     """
-    pass
+    # the exit is never a source since we dont travel out of it
+    # so we need to run dijkstra from the spawn and each relic
+    sources = [spawn]
+    for r in relics:
+        if r not in sources:
+            sources.append(r)
+    return sources
 
 
 def run_dijkstra(graph, source):
@@ -77,7 +83,23 @@ def run_dijkstra(graph, source):
 
     TODO
     """
-    pass
+    # dijkstra with min-heap, we have non-neg edge costs
+    # this should give us shortest path from source to every reachable node
+
+    dist = {node: float('inf') for node in graph}
+    dist[source] = 0
+    heap = [(0, source)]
+
+    while heap:
+        cost, u = heapq.heappop(heap)
+        if cost > dist[u]:
+            continue
+        for v, w in graph[u]:
+            new_cost = cost + w
+            if new_cost < dist[v]:
+                dist[v] = new_cost
+                heapq.heappush(heap, (new_cost, v))
+    return dist
 
 
 def precompute_distances(graph, spawn, relics, exit_node):
@@ -97,7 +119,13 @@ def precompute_distances(graph, spawn, relics, exit_node):
 
     TODO
     """
-    pass
+    # run dijkstra from every source in select_sources
+    # store the results in nested dict for dist_table[u][v] later
+    sources = select_sources(spawn, relics, exit_node)
+    dist_table = {}
+    for s in sources:
+        dist_table[s] = run_dijkstra(graph, s)
+    return dist_table
 
 
 # =============================================================================
@@ -114,7 +142,16 @@ def dijkstra_invariant_check():
 
     TODO
     """
-    return "TODO"
+    Q1 = "dist[v] is the actual shortest path cost from x to v and it wont change."
+    Q2 = "The algorithm has confirmed there is no cheaper way to get there"
+    Q3 = "dist[u] is the cheapest path to u we have found so far but only using finalized nodes as the steps in between."
+    Q4 = "It can still get smaller once more nodes get added to S."
+    Q5 = "Before the first interation S will be empty so the \"for every v in S\" part is true. dist[x] is 0 since the empty path from x to iteslf has cost 0, and every other dist is infinity which matches \"no path exists using only S-internal vertices\" since there are no internal vertices to use yet."
+    Q6 = "When we pop the min-dist node u from outside S, dist[u] really is its shortest path. Any shorter path would have to leave S at some node w with dist[w] less than or equal to dist[u], but since edge weights are nonnegative the rest of the path from w to u cant make the total smaller, so no shorter path can exist."
+    Q7 = "Once the heap is empty every reachable node has been finalized, so the dist values are the shortest path costs from x. anything unreachable stays at infinity."
+    Q8 = "If the distance table has wrong values then the route planner is optimizing over fake costs, so the order it picks might be more expensive than another order in the real graph."
+    
+    return Q1 + Q2 + Q3 + Q4 + Q5 + Q6 + Q7 + Q8
 
 
 # =============================================================================
@@ -283,4 +320,6 @@ def _run_tests():
 
 if __name__ == "__main__":
     _run_tests()
+    
+    
     
