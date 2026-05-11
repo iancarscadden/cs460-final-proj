@@ -143,13 +143,13 @@ def dijkstra_invariant_check():
     TODO
     """
     Q1 = "dist[v] is the actual shortest path cost from x to v and it wont change."
-    Q2 = "The algorithm has confirmed there is no cheaper way to get there"
-    Q3 = "dist[u] is the cheapest path to u we have found so far but only using finalized nodes as the steps in between."
-    Q4 = "It can still get smaller once more nodes get added to S."
-    Q5 = "Before the first interation S will be empty so the \"for every v in S\" part is true. dist[x] is 0 since the empty path from x to iteslf has cost 0, and every other dist is infinity which matches \"no path exists using only S-internal vertices\" since there are no internal vertices to use yet."
-    Q6 = "When we pop the min-dist node u from outside S, dist[u] really is its shortest path. Any shorter path would have to leave S at some node w with dist[w] less than or equal to dist[u], but since edge weights are nonnegative the rest of the path from w to u cant make the total smaller, so no shorter path can exist."
-    Q7 = "Once the heap is empty every reachable node has been finalized, so the dist values are the shortest path costs from x. anything unreachable stays at infinity."
-    Q8 = "If the distance table has wrong values then the route planner is optimizing over fake costs, so the order it picks might be more expensive than another order in the real graph."
+    Q2 = " The algorithm has confirmed there is no cheaper way to get there"
+    Q3 = " dist[u] is the cheapest path to u we have found so far but only using finalized nodes as the steps in between."
+    Q4 = " It can still get smaller once more nodes get added to S."
+    Q5 = " Before the first interation S will be empty so the \"for every v in S\" part is true. dist[x] is 0 since the empty path from x to iteslf has cost 0 and every other dist is infinity which matches \"no path exists using only S-internal vertices\" since there are no internal vertices to use yet."
+    Q6 = " When we pop the min-dist node u from outside S, dist[u] really is its shortest path. Any shorter path would have to leave S at some node w with dist[w] less than or equal to dist[u], but since edge weights are nonnegative the rest of the path from w to u cant make the total smaller, so no shorter path can exist."
+    Q7 = " Once the heap is empty every reachable node has been finalized, so the dist values are the shortest path costs from x. anything unreachable stays at infinity."
+    Q8 = " If the distance table has wrong values then the route planner is optimizing over fake costs, so the order it picks might be more expensive than another order in the real graph."
     
     return Q1 + Q2 + Q3 + Q4 + Q5 + Q6 + Q7 + Q8
 
@@ -168,7 +168,15 @@ def explain_search():
 
     TODO
     """
-    return "TODO"
+
+    Q1 = "Nearest neighbor greedy will pick the cheapest next relic from wherever we currently are. This will break when the cheapest first hop puts us in a spot where everything after is a lot for expensive."
+    Q2 = " Say we have two relics, A and B, with parwise costs S -> A = 4, S -> B = 6, A -> B = 67, A -> T = 4, B -> A = 4, B -> T = 56. Each relic has one cheap outgoing edge but they go to different places. A's cheap edge goes to T and B's cheap edge goes to A."
+    Q3 = " Greedy goes S -> A first since A is the cheapest from S. Then from A it has to take A -> B to grab B, then B -> T to get another 56, for total 4 + 67 + 56 = 127."
+    Q4 = " Optimal is S -> B -> A -> T = 6 + 4 + 4 = 14. the order [B, A] lets you use each relics cheap outgoing edge."
+    Q5 = " Greedy saves 2 unit by picking A over B at the start, but it lost 115 next because going to A first forced the expensive A -> B and B -> T edges."
+    Q6 = " The algo has to try different orders of the relics between S and T since the cheapest total cost isnt determined by any single local choice its the sum across the whole sequence."
+
+    return Q1 + Q2 + Q3 + Q4 + Q5 + Q6
 
 
 # =============================================================================
@@ -319,7 +327,7 @@ def _run_tests():
 
 
 if __name__ == "__main__":
-    _run_tests()
+     _run_tests()
     
     
     

@@ -88,7 +88,7 @@
 > One to two bullets per phase. Maintenance must mention nonnegative edge weights.
 
 - **Initialization : why the invariant holds before iteration 1:**
-  - Before the first interation S will be empty so the "for every v in S" part is true. dist[x] is 0 since the empty path from x to iteslf has cost 0, and every other dist is infinity which matches "no path exists using only S-internal vertices" since there are no internal vertices to use yet.
+  - Before the first interation S will be empty so the "for every v in S" part is true. dist[x] is 0 since the empty path from x to iteslf has cost 0 and every other dist is infinity which matches "no path exists using only S-internal vertices" since there are no internal vertices to use yet.
 
 - **Maintenance : why finalizing the min-dist node is always correct:**
   - When we pop the min-dist node u from outside S, dist[u] really is its shortest path. Any shorter path would have to leave S at some node w with dist[w] less than or equal to dist[u], but since edge weights are nonnegative the rest of the path from w to u cant make the total smaller, so no shorter path can exist.
@@ -111,17 +111,17 @@
 > State the failure mode. Then give a concrete counter-example using specific node names
 > or costs (you may use the illustration example from the spec). Three to five bullets.
 
-- **The failure mode:** _Your answer here._
-- **Counter-example setup:** _Your answer here._
-- **What greedy picks:** _Your answer here._
-- **What optimal picks:** _Your answer here._
-- **Why greedy loses:** _Your answer here._
+- **The failure mode:** Nearest neighbor greedy will pick the cheapest next relic from wherever we currently are. This will break when the cheapest first hop puts us in a spot where everything after is a lot for expensive.
+- **Counter-example setup:** Say we have two relics, A and B, with parwise costs S -> A = 4, S -> B = 6, A -> B = 67, A -> T = 4, B -> A = 4, B -> T = 56. Each relic has one cheap outgoing edge but they go to different places. A's cheap edge goes to T and B's cheap edge goes to A.
+- **What greedy picks:** Greedy goes S -> A first since A is the cheapest from S. Then from A it has to take A -> B to grab B, then B -> T to get another 56, for total 4 + 67 + 56 = 127.
+- **What optimal picks:** Optimal is S -> B -> A -> T = 6 + 4 + 4 = 14. the order [B, A] lets you use each relics cheap outgoing edge.
+- **Why greedy loses:** Greedy saves 2 unit by picking A over B at the start, but it lost 115 next because going to A first forced the expensive A -> B and B -> T edges.
 
 ### What the Algorithm Must Explore
 
 > One bullet. Must use the word "order."
 
-- _Your answer here._
+- The algo has to try different orders of the relics between S and T since the cheapest total cost isnt determined by any single local choice its the sum across the whole sequence.
 
 ---
 
