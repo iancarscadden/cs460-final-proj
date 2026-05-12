@@ -17,6 +17,7 @@ INSTRUCTIONS
 Submit this file as: torchbearer.py
 """
 
+import dis
 import heapq
 
 
@@ -203,7 +204,18 @@ def find_optimal_route(dist_table, spawn, relics, exit_node):
 
     TODO
     """
-    pass
+    # handle edge case of no relics go straight from spawn to exit
+    if not relics:
+        if exit_node in dist_table.get(spawn, {}):
+            return (dist_table[spawn][exit_node], [])
+        return (float('inf'), [])
+
+    best = [float('inf'), []]
+    relics_remaining = set(relics)
+
+    _explore(dist_table, spawn, relics_remaining, [], 0, exit_node, best)
+    return (best[0], best[1])
+
 
 
 def _explore(dist_table, current_loc, relics_remaining, relics_visited_order,
@@ -235,7 +247,27 @@ def _explore(dist_table, current_loc, relics_remaining, relics_visited_order,
     explaining why it is safe (cannot skip the optimal solution).
     This comment is graded.
     """
-    pass
+    # base case every relic collected take the final hop to exit
+    if not relics_remaining:
+        if exit_node not in dist_table[current_loc]:
+            return
+        total  = cost_so_far + dist_table[current_loc][exit_node]
+        if total < best[0]:
+            best[0] = total
+            best[1] = list(relics_visited_order)
+        return
+
+    # recursive case try each remanining relic as the next stop
+    for r in list(relics_remaining):
+        if r not in dist_table[current_loc]:
+            continue
+        step_cost = dist_table[current_loc][r]
+        relics_remaining.remove(r)
+        relics_visited_order.append(r)
+        _explore(dist_table, r, relics_remaining, relics_visited_order, cost_so_far + step_cost, exit_node, best)
+        relics_visited_order.pop()
+        relics_remaining.add(r)
+
 
 
 # =============================================================================
@@ -260,6 +292,7 @@ def solve(graph, spawn, relics, exit_node):
     TODO
     """
     pass
+   
 
 
 # =============================================================================
@@ -327,7 +360,6 @@ def _run_tests():
 
 
 if __name__ == "__main__":
-     _run_tests()
-    
+    _run_tests()
     
     

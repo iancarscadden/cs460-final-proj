@@ -132,30 +132,30 @@
 > Document the three components of your search state as a table.
 > Variable names here must match exactly what you use in torchbearer.py.
 
-| Component                | Variable name in code | Data type | Description |
-| ------------------------ | --------------------- | --------- | ----------- |
-| Current location         |                       |           |             |
-| Relics already collected |                       |           |             |
-| Fuel cost so far         |                       |           |             |
+| Component                | Variable name in code | Data type     | Description                                                   |
+| ------------------------ | --------------------- | ------------- | ------------------------------------------------------------- |
+| Current location         | current_loc           | node          | the relic or spawn the torchbearer is currently positioned at |
+| Relics already collected | relics_visited_order  | list of nodes | ordered list of relics visited so far in the recursion flow   |
+| Fuel cost so far         | cost_so_far           | int/float     | total fuel burned to reach current_loc                        |
 
 ### Part 5b: Data Structure for Visited Relics
 
 > Fill in the table.
 
-| Property                                    | Your answer      |
-| ------------------------------------------- | ---------------- |
-| Data structure chosen                       |                  |
-| Operation: check if relic already collected | Time complexity: |
-| Operation: mark a relic as collected        | Time complexity: |
-| Operation: unmark a relic (backtrack)       | Time complexity: |
-| Why this structure fits                     |                  |
+| Property                                    | Your answer                                                                                                                       |
+| ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| Data structure chosen                       | set                                                                                                                               |
+| Operation: check if relic already collected | Time complexity: O(1) average                                                                                                     |
+| Operation: mark a relic as collected        | Time complexity: O(1) average                                                                                                     |
+| Operation: unmark a relic (backtrack)       | Time complexity: O(1) average                                                                                                     |
+| Why this structure fits                     | hash set gives O(1) average for membership check, add, and remove, and all three happen constantly during the backtracking search |
 
 ### Part 5c: Worst-Case Search Space
 
 > Two bullets.
 
-- **Worst-case number of orders considered:** _Your answer (in terms of k)._
-- **Why:** _One-line justification._
+- **Worst-case number of orders considered:** k!
+- **Why:** at the top of the serach we pick any of the k relics to visit first then any of the remaining k-1, then k-2, etc the way down, which gives `k * (k-1) * ... * 1 = k!` orderings
 
 ---
 

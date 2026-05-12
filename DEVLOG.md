@@ -23,12 +23,12 @@ answer to ensure the search is not greedy.
 
 ---
 
-## Entry 2 – [Date]: [Short description]
+## Entry 2 – [5/11/26]: [Short description]
 
 > Required. At least one entry must describe a bug, wrong assumption, or design change
 > you encountered. Describe what went wrong and how you resolved it.
 
-_Your entry here._
+Implemented the find_optimal_route and \_explore without the pruning. I used a set for the relics_remaining since we want O(1) check, add, remove during the backtracking. I was confused by why the function used both relics_remaning and relics_visited_order since one could be derived via the other but i see that they serve different purposes. relics_remaining is used for fast membership during recursion and relics_visited_order is for building the final answer. Also ran tests to verify passing then reverted solve() back to pass.
 
 ---
 
@@ -57,7 +57,7 @@ _Your entry here._
 | Part 2: Precomputation Design  | 1hr             |
 | Part 3: Algorithm Correctness  | 1.5 hr          |
 | Part 4: Search Design          | 1.1 hr          |
-| Part 5: State and Search Space |                 |
+| Part 5: State and Search Space | 2 hr            |
 | Part 6: Pruning                |                 |
 | Part 7: Implementation         |                 |
 | README and DEVLOG writing      |                 |
