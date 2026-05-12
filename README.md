@@ -84,7 +84,7 @@
 
 ### Why Greedy Fails
 
-- **The failure mode:** Nearest neighbor greedy will pick the cheapest next relic from wherever we currently are. This will break when the cheapest first hop puts us in a spot where everything after is a lot for expensive.
+- **The failure mode:** Nearest neighbor greedy will pick the cheapest next relic from wherever we currently are. This will break when the cheapest first hop puts us in a spot where everything after is a lot more expensive.
 - **Counter-example setup:** Say we have two relics, A and B, with parwise costs S -> A = 4, S -> B = 6, A -> B = 67, A -> T = 4, B -> A = 4, B -> T = 56. Each relic has one cheap outgoing edge but they go to different places. A's cheap edge goes to T and B's cheap edge goes to A.
 - **What greedy picks:** Greedy goes S -> A first since A is the cheapest from S. Then from A it has to take A -> B to grab B, then B -> T to get another 56, for total 4 + 67 + 56 = 127.
 - **What optimal picks:** Optimal is S -> B -> A -> T = 6 + 4 + 4 = 14. the order [B, A] lets you use each relics cheap outgoing edge.
