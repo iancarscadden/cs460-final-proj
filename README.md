@@ -4,17 +4,9 @@
 **Student ID:** 827329757
 **Course:** CS 460 – Algorithms | Spring 2026
 
-> This README is your project documentation. Write it the way a developer would document
-> their design decisions , bullet points, brief justifications, and concrete examples where
-> required. You are not writing an essay. You are explaining what you built and why you built
-> it that way. Delete all blockquotes like this one before submitting.
-
 ---
 
 ## Part 1: Problem Analysis
-
-> Document why this problem is not just a shortest-path problem. Three bullet points, one
-> per question. Each bullet should be 1-2 sentences max.
 
 - **Why a single shortest-path run from S is not enough:**
   Dijkstra from S can give us the cheapest cost to get to every node from S, but it cant decide whic relic to visit first.
@@ -35,16 +27,12 @@
 
 ### Part 2a: Source Selection
 
-> List the source node types as a bullet list. For each, one-line reason.
-
-| Source Node Type | Why it is a source                                                                                                                            |
-| ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| S                | We start the route here, so we want the cheapest cost from S to every relic to decide which one to go at first.                               |
-| Each relic       | After we visit a relic we want the cheapest cost from it to the remaining relics or the xit so every relic also have ot be a dijkstra source. |
+| Source Node Type | Why it is a source                                                                                                                             |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| S                | We start the route here, so we want the cheapest cost from S to every relic to decide which one to go at first.                                |
+| Each relic       | After we visit a relic we want the cheapest cost from it to the remaining relics or the exit so every relic also have to be a dijkstra source. |
 
 ### Part 2b: Distance Storage
-
-> Fill in the table. No prose required.
 
 | Property                    | Your answer                                                                                    |
 | --------------------------- | ---------------------------------------------------------------------------------------------- |
@@ -56,8 +44,6 @@
 
 ### Part 2c: Precomputation Complexity
 
-> State the total complexity and show the arithmetic. Two to three lines max.
-
 - **Number of Dijkstra runs:** `k + 1`, one from the spawn and one from each of the k relics
 - **Cost per run:** O(m log n) using binary heap
 - **Total complexity:** `O((k + 1) * m log n)` simplified -> `O(k * m log n)`
@@ -67,13 +53,7 @@
 
 ## Part 3: Algorithm Correctness
 
-> Document your understanding of why Dijkstra produces correct distances.
-> Bullet points and short sentences throughout. No paragraphs.
-
 ### Part 3a: What the Invariant Means
-
-> Two bullets: one for finalized nodes, one for non-finalized nodes.
-> Do not copy the invariant text from the spec.
 
 - **For nodes already finalized (in S):**
   - dist[v] is the actual shortest path cost from x to v and it wont change.
@@ -84,8 +64,6 @@
   - It can still get smaller once more nodes get added to S.
 
 ### Part 3b: Why Each Phase Holds
-
-> One to two bullets per phase. Maintenance must mention nonnegative edge weights.
 
 - **Initialization : why the invariant holds before iteration 1:**
   - Before the first interation S will be empty so the "for every v in S" part is true. dist[x] is 0 since the empty path from x to iteslf has cost 0 and every other dist is infinity which matches "no path exists using only S-internal vertices" since there are no internal vertices to use yet.
@@ -98,8 +76,6 @@
 
 ### Part 3c: Why This Matters for the Route Planner
 
-> One sentence connecting correct distances to correct routing decisions.
-
 - If the distance table has wrong values then the route planner is optimizing over fake costs, so the order it picks might be more expensive than another order in the real graph.
 
 ---
@@ -107,9 +83,6 @@
 ## Part 4: Search Design
 
 ### Why Greedy Fails
-
-> State the failure mode. Then give a concrete counter-example using specific node names
-> or costs (you may use the illustration example from the spec). Three to five bullets.
 
 - **The failure mode:** Nearest neighbor greedy will pick the cheapest next relic from wherever we currently are. This will break when the cheapest first hop puts us in a spot where everything after is a lot for expensive.
 - **Counter-example setup:** Say we have two relics, A and B, with parwise costs S -> A = 4, S -> B = 6, A -> B = 67, A -> T = 4, B -> A = 4, B -> T = 56. Each relic has one cheap outgoing edge but they go to different places. A's cheap edge goes to T and B's cheap edge goes to A.
@@ -119,8 +92,6 @@
 
 ### What the Algorithm Must Explore
 
-> One bullet. Must use the word "order."
-
 - The algo has to try different orders of the relics between S and T since the cheapest total cost isnt determined by any single local choice its the sum across the whole sequence.
 
 ---
@@ -129,9 +100,6 @@
 
 ### Part 5a: State Representation
 
-> Document the three components of your search state as a table.
-> Variable names here must match exactly what you use in torchbearer.py.
-
 | Component                | Variable name in code | Data type     | Description                                                   |
 | ------------------------ | --------------------- | ------------- | ------------------------------------------------------------- |
 | Current location         | current_loc           | node          | the relic or spawn the torchbearer is currently positioned at |
@@ -139,8 +107,6 @@
 | Fuel cost so far         | cost_so_far           | int/float     | total fuel burned to reach current_loc                        |
 
 ### Part 5b: Data Structure for Visited Relics
-
-> Fill in the table.
 
 | Property                                    | Your answer                                                                                                                       |
 | ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
@@ -152,8 +118,6 @@
 
 ### Part 5c: Worst-Case Search Space
 
-> Two bullets.
-
 - **Worst-case number of orders considered:** k!
 - **Why:** at the top of the serach we pick any of the k relics to visit first then any of the remaining k-1, then k-2, etc the way down, which gives `k * (k-1) * ... * 1 = k!` orderings
 
@@ -163,23 +127,17 @@
 
 ### Part 6a: Best-So-Far Tracking
 
-> Three bullets.
-
 - **What is tracked:** The lowest total fuel cost of any complete route from S through all relics to T we have found so far plus the orderings of the relics that produced it. Stored in best[0] and best[1]
 - **When it is used:** At the top of every recursive call we compare a lower bound on the current branch against best[0], and we also compare against best when a newly completed route is found to see if its an improvement
 - **What it allows the algorithm to skip:** Any partial route whose lowest possible completion cant beat best gets cut off without expanding deeper.
 
 ### Part 6b: Lower Bound Estimation
 
-> Three bullets.
-
 - **What information is available at the current state:** cost_so_far, current_loc, the set of remaining relics, the dist_table, and the precomputed cheapest_edge stashed in best[2]
 - **What the lower bound accounts for:** We still need remaining + 1 more hops to finish, one per remaining relics plus one to the exit, and each hop costs at least cheapest_edge. so cost_so_far + (remaining + 1) \* cheapest_edge is the lowest the total could come out to.
 - **Why it never overestimates:** Every valid continuation has to use at least that many hops and every hop is at least cheapest_edge, so the real final cost can never come in below the bound.
 
 ### Part 6c: Pruning Correctness
-
-> One to two bullets. Explain why pruning is safe.
 
 - if the lower bound on completing this branch is already >= best then every possible completion would also be >= best.
 - Skipping this branch cant cause us to lose the optimal since the optimal would have to come in stictly below best to win and we just proved nothing in this branch can.
@@ -188,6 +146,4 @@
 
 ## References
 
-> Bullet list. If none beyond lecture notes, write that.
-
-- _Your references here._
+- Lecture notes

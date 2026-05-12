@@ -3,17 +3,9 @@
 **Student Name:** Ian Carscadden
 **Student ID:** 827329757
 
-> Instructions: Write at least four dated entries. Required entry types are marked below.
-> Two to five sentences per entry is sufficient. Write entries as you go, not all in one
-> sitting. Graders check that entries reflect genuine work across multiple sessions.
-> Delete all blockquotes before submitting.
-
 ---
 
-## Entry 1 – [5/10/26]: Initial Plan
-
-> Required. Write this before writing any code. Describe your plan: what you will
-> implement first, what parts you expect to be difficult, and how you plan to test.
+## Entry 1 – 5/10/26: Initial Plan
 
 This seems like a TSP variant where we have a directed graph and we need to hit every relic in a order between S and T.
 My plan is to precompute shortest paths with dijkstra from S and each relic, then perform a recursive serach over relic orderings.
@@ -23,33 +15,25 @@ answer to ensure the search is not greedy.
 
 ---
 
-## Entry 2 – [5/11/26]: [find_optimal_route + base recursive search]
+## Entry 2 – 5/11/26: find_optimal_route + base recursive search
 
-> Required. At least one entry must describe a bug, wrong assumption, or design change
-> you encountered. Describe what went wrong and how you resolved it.
-
-Implemented the find_optimal_route and \_explore without the pruning. I used a set for the relics_remaining since we want O(1) check, add, remove during the backtracking. I was confused by why the function used both relics_remaning and relics_visited_order since one could be derived via the other but i see that they serve different purposes. relics_remaining is used for fast membership during recursion and relics_visited_order is for building the final answer. Also ran tests to verify passing then reverted solve() back to pass.
+Implemented the find_optimal_route and \_explore without the pruning. I used a set for the relics_remaining since we want O(1) check, add, remove during the backtracking. I was confused by why the function used both relics_remaning and relics_visited_order since one could be derived via the other but i see that they serve different purposes. relics_remaining is used for fast membership during recursion and relics_visited_order is for building the final answer.
 
 ---
 
-## Entry 3 – [5/12/26]: [Pruning + lower bound]
+## Entry 3 – 5/12/26: Pruning + lower bound
 
 Lower bound for pruning is cost_so_far + (remaining + 1) \* cheapest_edge, where cheapest_edge is the smallest value in the dist_table other than the zeros on the diagonal. cheapest_edge get computed once in find_optimal_route before any recursion. In \_explore i put it in best[2]. Solve function is in as well and all of the tests pass.
 
 ---
 
-## Entry 4 – [Date]: Post-Implementation Reflection
+## Entry 4 – 5/12/26: Post-Implementation Reflection
 
-> Required. Written after your implementation is complete. Describe what you would
-> change or improve given more time.
-
-_Your entry here._
+All of tests from run_tests pass. The part i would keep building on is the lower bound. (remaining + 1) \* cheapest_edge works but its pretty loose since cheapest_edge is almost never the actual edge cost we use, so a lot of branches get expanded on that prob dont need to. A better version would use the cheapest incoming edge per relic but its more work.
 
 ---
 
-## Final Entry – [Date]: Time Estimate
-
-> Required. Estimate minutes spent per part. Honesty is expected; accuracy is not graded.
+## Final Entry – 5/12/26: Time Estimate
 
 | Part                           | Estimated Hours |
 | ------------------------------ | --------------- |
@@ -59,6 +43,6 @@ _Your entry here._
 | Part 4: Search Design          | 1.1 hr          |
 | Part 5: State and Search Space | 2 hr            |
 | Part 6: Pruning                | 1.5hr           |
-| Part 7: Implementation         |                 |
-| README and DEVLOG writing      |                 |
-| **Total**                      |                 |
+| Part 7: Implementation         | 1hr             |
+| README and DEVLOG writing      | 1hr             |
+| **Total**                      | 10.1hr          |

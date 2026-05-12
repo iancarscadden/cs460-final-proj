@@ -17,8 +17,6 @@ INSTRUCTIONS
 Submit this file as: torchbearer.py
 """
 
-import dis
-from gettext import find
 import heapq
 
 
@@ -239,12 +237,6 @@ def _explore(dist_table, current_loc, relics_remaining, relics_visited_order,
     -------
     None
         Updates best in place.
-
-    Implement: base case, pruning, recursive case, backtracking.
-
-    REQUIRED: Add a 1-2 sentence comment near your pruning condition
-    explaining why it is safe (cannot skip the optimal solution).
-    This comment is graded.
     """
     # base case every relic collected take the final hop to exit
     if not relics_remaining:
@@ -258,7 +250,7 @@ def _explore(dist_table, current_loc, relics_remaining, relics_visited_order,
 
     # pruning
     # we still need remaining + 1 more hops to finish and each hop costs at least
-    # cheapest_edge, so cost_so_far + (remainging + 1) * cheapest_edge is the lowest
+    # cheapest_edge, so cost_so_far + (remaining + 1) * cheapest_edge is the lowest
     # the total could come out to. if that lower bound is already >= best then
     # nothing in this branch can beat best so we can return early 
     cheapest_edge = best[2]
