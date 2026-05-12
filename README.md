@@ -165,23 +165,24 @@
 
 > Three bullets.
 
-- **What is tracked:** _Your answer here._
-- **When it is used:** _Your answer here._
-- **What it allows the algorithm to skip:** _Your answer here._
+- **What is tracked:** The lowest total fuel cost of any complete route from S through all relics to T we have found so far plus the orderings of the relics that produced it. Stored in best[0] and best[1]
+- **When it is used:** At the top of every recursive call we compare a lower bound on the current branch against best[0], and we also compare against best when a newly completed route is found to see if its an improvement
+- **What it allows the algorithm to skip:** Any partial route whose lowest possible completion cant beat best gets cut off without expanding deeper.
 
 ### Part 6b: Lower Bound Estimation
 
 > Three bullets.
 
-- **What information is available at the current state:** _Your answer here._
-- **What the lower bound accounts for:** _Your answer here._
-- **Why it never overestimates:** _Your answer here._
+- **What information is available at the current state:** cost_so_far, current_loc, the set of remaining relics, the dist_table, and the precomputed cheapest_edge stashed in best[2]
+- **What the lower bound accounts for:** We still need remaining + 1 more hops to finish, one per remaining relics plus one to the exit, and each hop costs at least cheapest_edge. so cost_so_far + (remaining + 1) \* cheapest_edge is the lowest the total could come out to.
+- **Why it never overestimates:** Every valid continuation has to use at least that many hops and every hop is at least cheapest_edge, so the real final cost can never come in below the bound.
 
 ### Part 6c: Pruning Correctness
 
 > One to two bullets. Explain why pruning is safe.
 
-- _Your answer here._
+- if the lower bound on completing this branch is already >= best then every possible completion would also be >= best.
+- Skipping this branch cant cause us to lose the optimal since the optimal would have to come in stictly below best to win and we just proved nothing in this branch can.
 
 ---
 

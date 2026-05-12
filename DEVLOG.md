@@ -23,7 +23,7 @@ answer to ensure the search is not greedy.
 
 ---
 
-## Entry 2 – [5/11/26]: [Short description]
+## Entry 2 – [5/11/26]: [find_optimal_route + base recursive search]
 
 > Required. At least one entry must describe a bug, wrong assumption, or design change
 > you encountered. Describe what went wrong and how you resolved it.
@@ -32,9 +32,9 @@ Implemented the find_optimal_route and \_explore without the pruning. I used a s
 
 ---
 
-## Entry 3 – [Date]: [Short description]
+## Entry 3 – [5/12/26]: [Pruning + lower bound]
 
-_Your entry here._
+Lower bound for pruning is cost_so_far + (remaining + 1) \* cheapest_edge, where cheapest_edge is the smallest value in the dist_table other than the zeros on the diagonal. cheapest_edge get computed once in find_optimal_route before any recursion. In \_explore i put it in best[2]. Solve function is in as well and all of the tests pass.
 
 ---
 
@@ -58,7 +58,7 @@ _Your entry here._
 | Part 3: Algorithm Correctness  | 1.5 hr          |
 | Part 4: Search Design          | 1.1 hr          |
 | Part 5: State and Search Space | 2 hr            |
-| Part 6: Pruning                |                 |
+| Part 6: Pruning                | 1.5hr           |
 | Part 7: Implementation         |                 |
 | README and DEVLOG writing      |                 |
 | **Total**                      |                 |

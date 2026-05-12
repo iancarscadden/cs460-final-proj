@@ -18,6 +18,7 @@ Submit this file as: torchbearer.py
 """
 
 import dis
+from gettext import find
 import heapq
 
 
@@ -57,7 +58,6 @@ def select_sources(spawn, relics, exit_node):
     list[node]
         No duplicates. Order does not matter.
 
-    TODO
     """
     # the exit is never a source since we dont travel out of it
     # so we need to run dijkstra from the spawn and each relic
@@ -82,7 +82,6 @@ def run_dijkstra(graph, source):
         Minimum cost from source to every node in graph.
         Unreachable nodes map to float('inf').
 
-    TODO
     """
     # dijkstra with min-heap, we have non-neg edge costs
     # this should give us shortest path from source to every reachable node
@@ -118,7 +117,6 @@ def precompute_distances(graph, spawn, relics, exit_node):
         Nested structure supporting dist_table[u][v] lookups
         for every source u your design requires.
 
-    TODO
     """
     # run dijkstra from every source in select_sources
     # store the results in nested dict for dist_table[u][v] later
@@ -140,8 +138,6 @@ def dijkstra_invariant_check():
     str
         Your Part 3 README answers, written as a string.
         Must match what you wrote in README Part 3.
-
-    TODO
     """
     Q1 = "dist[v] is the actual shortest path cost from x to v and it wont change."
     Q2 = " The algorithm has confirmed there is no cheaper way to get there"
@@ -166,8 +162,6 @@ def explain_search():
     str
         Your Part 4 README answers, written as a string.
         Must match what you wrote in README Part 4.
-
-    TODO
     """
 
     Q1 = "Nearest neighbor greedy will pick the cheapest next relic from wherever we currently are. This will break when the cheapest first hop puts us in a spot where everything after is a lot for expensive."
@@ -201,8 +195,6 @@ def find_optimal_route(dist_table, spawn, relics, exit_node):
     tuple[float, list[node]]
         (minimum_fuel_cost, ordered_relic_list)
         Returns (float('inf'), []) if no valid route exists.
-
-    TODO
     """
     # handle edge case of no relics go straight from spawn to exit
     if not relics:
@@ -210,7 +202,15 @@ def find_optimal_route(dist_table, spawn, relics, exit_node):
             return (dist_table[spawn][exit_node], [])
         return (float('inf'), [])
 
-    best = [float('inf'), []]
+    # find the cheapest pairwise cost in the table to use as a floor
+    # in pruning lower bound
+    cheapest_edge = float('inf')
+    for src in dist_table.values():
+        for d in src.values():
+            if 0 < d < cheapest_edge:
+                cheapest_edge = d
+
+    best = [float('inf'), [], cheapest_edge]
     relics_remaining = set(relics)
 
     _explore(dist_table, spawn, relics_remaining, [], 0, exit_node, best)
@@ -240,7 +240,6 @@ def _explore(dist_table, current_loc, relics_remaining, relics_visited_order,
     None
         Updates best in place.
 
-    TODO
     Implement: base case, pruning, recursive case, backtracking.
 
     REQUIRED: Add a 1-2 sentence comment near your pruning condition
@@ -256,6 +255,17 @@ def _explore(dist_table, current_loc, relics_remaining, relics_visited_order,
             best[0] = total
             best[1] = list(relics_visited_order)
         return
+
+    # pruning
+    # we still need remaining + 1 more hops to finish and each hop costs at least
+    # cheapest_edge, so cost_so_far + (remainging + 1) * cheapest_edge is the lowest
+    # the total could come out to. if that lower bound is already >= best then
+    # nothing in this branch can beat best so we can return early 
+    cheapest_edge = best[2]
+    hops_needed = len(relics_remaining) + 1
+    lower_bound = cost_so_far + hops_needed * cheapest_edge
+    if lower_bound >= best[0]:
+        return        
 
     # recursive case try each remanining relic as the next stop
     for r in list(relics_remaining):
@@ -288,10 +298,9 @@ def solve(graph, spawn, relics, exit_node):
     tuple[float, list[node]]
         (minimum_fuel_cost, ordered_relic_list)
         Returns (float('inf'), []) if no valid route exists.
-
-    TODO
     """
-    pass
+    dist_table = precompute_distances(graph, spawn, relics, exit_node)
+    return find_optimal_route(dist_table, spawn, relics, exit_node)
    
 
 
